@@ -393,6 +393,12 @@ class QtEventReactor(QtReactor):
 
     def timeout(self):
         t = super(QtEventReactor, self).timeout()
+
+        minimum = 0.01
+
+        if t is None:
+            return minimum
+
         return min(t, 0.01)
 
     def iterate(self, delay=None):
