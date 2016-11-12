@@ -408,7 +408,7 @@ class QtEventReactor(QtReactor):
 
         self.runUntilCurrent()
         self.doEvents()
-        self.doIteration(delay)
+        self.doIteration(delay, fromqt=True)
 
 
 def posixinstall():
