@@ -195,7 +195,7 @@ class QtReactor(posixbase.PosixReactorBase):
         self._notifiers = {}
         self._timer = QTimer()
         self._timer.setSingleShot(True)
-        self._timer.timeout.connect(self.iterate)
+        self._timer.timeout.connect(self.iterate_qt)
 
         if QCoreApplication.instance() is None:
             # Application Object has not been started yet
@@ -288,9 +288,12 @@ class QtReactor(posixbase.PosixReactorBase):
         """
 
         self.runUntilCurrent()
-        self.doIteration(delay, fromqt)
+        self.doIteration(delay, fromqt=fromqt)
 
     iterate = _iterate
+
+    def iterate_qt(self, delay=None):
+        self.iterate(delay=delay, fromqt=True)
 
     def doIteration(self, delay=None, fromqt=False):
         """
@@ -401,14 +404,14 @@ class QtEventReactor(QtReactor):
 
         return min(t, 0.01)
 
-    def iterate(self, delay=None):
+    def iterate(self, delay=None, fromqt=False):
         """
         See twisted.internet.interfaces.IReactorCore.iterate.
         """
 
         self.runUntilCurrent()
         self.doEvents()
-        self.doIteration(delay, fromqt=True)
+        self.doIteration(delay, fromqt=fromqt)
 
 
 def posixinstall():
